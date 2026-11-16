@@ -5,12 +5,49 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  paths:
+    - 'src/**'
+
+env:
+  APP_NAME: "React App"
+  NODE_VERSION: "18"
+  TEST_FLAG: "true"
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Display github context info
+        run: |
+          echo github.ref: ${{ github.ref }}
+          echo github.sha: ${{ github.sha }}
+          echo github.event_name: ${{ github.event_name }}
+
+      - name: Display env values
+        run: |
+          echo env.APP_NAME: ${{ env.APP_NAME }}
+          echo env.NODE_VERSION: ${{ env.NODE_VERSION }}
+          echo env.TEST_FLAG: ${{ env.TEST_FLAG }}
+
+      - name: Check push event step
+        if: ${{ github.event_name }} == "push"
+        run: echo "This is a push event"
+
+      - name: Check pull_request event step
+        if: ${{ github.event_name }} == "pull_request"
+        run: echo "This is a pull_request event"
+
+      - name: Check commit message for [skip-tests]
+        if: contains(github.event.head_commit.message, '[skip-tests]')
+        run: |
+          echo "This is commit message contains [skip-tests]"
+          return 0
+
+      - name: Display EXTRA_FLAG value
+        run: |
+          echo EXTRA_FLAG: ${{ env.EXTRA_FLAG || 'none' }}
+
       - name: Check out repository code
         uses: actions/checkout@v7
         with:
