@@ -45,24 +45,26 @@ jobs:
         if: contains(github.event.head_commit.message, '[skip-tests]')
         run: |
           echo "This is commit message contains [skip-tests]"
-          return 0
 
       - name: Display EXTRA_FLAG value
         run: |
           echo EXTRA_FLAG: ${{ env.EXTRA_FLAG || 'none' }}
 
       - name: Check out repository code
+        if: contains(github.event.head_commit.message, '[skip-tests]') == false
         uses: actions/checkout@v7
         with:
           ref: main
 
       - name: Set up Node.js
+        if: contains(github.event.head_commit.message, '[skip-tests]') == false
         uses: actions/setup-node@v7
         with:
           node-version: lts/*
           cache: npm
 
       - name: Install dependencies
+        if: contains(github.event.head_commit.message, '[skip-tests]') == false
         run: npm ci
         # This command is similar to npm install, 
         # except it's meant to be used in automated environments such as test platforms, 
@@ -70,4 +72,5 @@ jobs:
         # -- or any situation where you want to make sure you're doing a clean install of your dependencies.
 
       - name: Run tests
+        if: contains(github.event.head_commit.message, '[skip-tests]') == false
         run: npm test
