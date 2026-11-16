@@ -34,11 +34,11 @@ jobs:
           echo env.TEST_FLAG: ${{ env.TEST_FLAG }}
 
       - name: Check push event step
-        if: ${{ github.event_name }} == "push"
+        if: github.event_name == 'push'
         run: echo "This is a push event"
 
       - name: Check pull_request event step
-        if: ${{ github.event_name }} == "pull_request"
+        if: github.event_name == 'pull_request'
         run: echo "This is a pull_request event"
 
       - name: Check commit message for [skip-tests]
