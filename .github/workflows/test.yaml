@@ -3,10 +3,13 @@ name: test React App render heading and increment counter
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
   pull_request:
     branches: [main]
-  paths:
-    - 'src/**'
+    paths:
+      - 'src/**'
+  
 
 env:
   APP_NAME: "React App"
